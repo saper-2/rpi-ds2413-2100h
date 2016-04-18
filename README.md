@@ -26,7 +26,7 @@ After looking a little around in 1-wire driver code, adding support for 2100H wa
 
 ## Repo files
 + ```linux``` - directory with modiffied files in layout identical to kernel sources. So just copy-paste with overwritting files should do the trick.
-  I have created new module (by copy-paste & find-replace :wink: ), added 2100H family code to base 1wire kernel module and modified Makefile and Kconfig so the my module can be enabled in kernel menuconfig and can be compiled with rest modules. 
+  I have created new module (by copy-paste & find-replace :wink: ), added 2100H family code to base 1wire kernel module and modified Makefile and Kconfig, so my module can be enabled in kernel menuconfig and can be compiled with other modules. 
 + ```config-my``` - my configuration file with enabled my module for 2100H - replace existing ```.config``` with this one after ```bcm2709_defconfig``` ( or just add to existing ```.config``` line with: ```CONFIG_W1_SLAVE_2100H=m``` )
 + ```2100h``` - bash script to make testing driver more easy
 + some photos :)
