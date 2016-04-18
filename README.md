@@ -4,7 +4,8 @@ I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10U
 Surprise, surprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
 Few week later :smile: , I made a PCB, hooked DS2413-clone to Raspberry Pi, enabled 1-wire overlay, etc... Everything is connected Pi is running let's see if it "still works" :smile:. Quick check:
 
-```pi@piv2:~ $ ls /sys/bus/w1/devices
+```
+pi@piv2:~ $ ls /sys/bus/w1/devices
 85-1003c073b2be  w1_bus_master1
 ```
 
