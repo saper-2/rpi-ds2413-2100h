@@ -58,12 +58,9 @@ config W1_SLAVE_2100H
 ```
 
 ## Copy file
-File: **w1_ds2413_2100h.c** copy to directory:
-```linux/drivers/w1/slaves/```
-
+File: **w1_ds2413_2100h.c** copy to directory: ```linux/drivers/w1/slaves/```
 
 # Compiling module
-
 I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attempts  to compile only module (and make it working) took me 2 or 3 hours :smile:.
 
 After calling ```make mrproper``` or ```make bcm2709_defconfig``` copy my kernel configuration file ```.config``` . 
