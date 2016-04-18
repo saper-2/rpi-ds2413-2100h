@@ -1,15 +1,18 @@
 # Kernel driver for Chinese clone of DS2413: 3A 2100H
--------------------------------------------------------------------------------
+---
 I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10USD for 10pcs...) - almost 2,5 times cheaper than in my country from electronic warehouse - cool, so I ordered a one set...
 Surprise, surprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
 Few week later :smile: , I made a PCB, hooked DS2413-clone to Raspberry Pi, enabled 1-wire overlay, etc... Everything is connected Pi is running let's see if it "still works" :smile:. Quick check:
 
 ```pi@piv2:~ $ ls /sys/bus/w1/devices
-85-1003c073b2be  w1_bus_master1```
+85-1003c073b2be  w1_bus_master1
+```
 
 Great, there is something: 85-xxxxxx . Now, If I remember there is already kernel driver for ds2413... Let's inspect "device directory" and kernel modules:
 ```pi@piv2:~ $ ls /sys/bus/w1/devices/85-1003c073b2be
-driver  id  name  rw  subsystem  uevent```
+driver  id  name  rw  subsystem  uevent
+```
+
 So I have `rw` file for accessing, but nothing with ds2413 in modules. Let's do some google-fu how to handle...
 A two hours later, I'm not happy anymore :disappointed:, looks like I got clones of DS2413 with own "Family code" od 0x85.. ehhhh...
 One solution is hex-editing ds2413 module - too ugly, so I decided I'll try to write own module (or more likely copy-paste :smile:).
