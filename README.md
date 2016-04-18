@@ -10,7 +10,8 @@ pi@piv2:~ $ ls /sys/bus/w1/devices
 ```
 
 Great, there is something: 85-xxxxxx . Now, If I remember there is already kernel driver for ds2413... Let's inspect "device directory" and kernel modules:
-```pi@piv2:~ $ ls /sys/bus/w1/devices/85-1003c073b2be
+```
+pi@piv2:~ $ ls /sys/bus/w1/devices/85-1003c073b2be
 driver  id  name  rw  subsystem  uevent
 ```
 
