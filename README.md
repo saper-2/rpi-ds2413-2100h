@@ -1,4 +1,6 @@
 # Kernel driver for Chinese clone of DS2413: 3A 2100H
+
+### Warning: If your Pi/hardware/etc. gone bad, that's your fault, not my.
 ---
 I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10USD for 10pcs...) - almost 2,5 times cheaper than in my country from electronic warehouse - cool, so I ordered a one set...
 Surprise, surprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
