@@ -25,31 +25,32 @@ After looking a little around in 1-wire driver code, adding support for 2100H wa
 **KERNEL VERSION: 4.4.y (4.4.7) from 2016-04-17**
 
 ## Edited files
-### ```linux/drivers/w1/w1_family.h```
+#### linux/drivers/w1/w1_family.h
 Under line 47:
 ```#define W1_THERM_DS28EA00	0x42```
 
 Add line:
 ```#define W1_FAMILY_2100H		0x85 // DS2413-2100H family```
 
-### ```linux/drivers/w1/slaves/Makefile```
+#### linux/drivers/w1/slaves/Makefile
 under line 8 :
 ```obj-$(CONFIG_W1_SLAVE_DS2413)   += w1_ds2413.o```
 
 Add line:
 ```obj-$(CONFIG_W1_SLAVE_2100H)    += w1_ds2413_2100h.o```
 
-### ```linux/drivers/w1/slaves/Kconfig```
+#### linux/drivers/w1/slaves/Kconfig
 Under block that start at line 35 :
-```config W1_SLAVE_DS2413
+```
+config W1_SLAVE_DS2413
         tristate "Dual Channel Addressable Switch 0x3a family support (DS2413)"
         help
           Say Y here if you want to use a 1-wire
           DS2413 Dual Channel Addressable Switch device support
 ```
 Add block:
-
-```config W1_SLAVE_2100H
+```
+config W1_SLAVE_2100H
         tristate "Dual Channel Addressable Switch 0x85 family support (clone DS2413: 3A 2100H)"
         help
           Say Y here if you want to use a 1-wire
