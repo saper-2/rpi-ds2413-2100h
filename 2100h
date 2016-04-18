@@ -1,0 +1,133 @@
+#!/bin/bash
+
+echo "Small script for testing driver for 1-wire 2100H (clone of DS2413)"
+echo "Author: saper_2 (Przemyslaw W.)"
+echo "Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)"
+echo " "
+echo " "
+
+if [ -z $1  ]; then
+	echo "Usage: "
+	echo "[sudo] ./2100h cmd [addr] [state PIOA] [state PIOB]"
+	echo "Parameters:"
+	echo "  cmd - required:"
+	echo "        s - print all found devices in format: [device_class]-[device_id]"
+	echo "        r - read GPIO state and print in binary "
+	echo "            (see DS2413 cmd PIO ACCESS READ for bit description)"
+	echo "        w - write new GPIO state. For more info see "
+	echo "            DS2413 datasheet, command PIO ACCESS WRITE"
+	echo "  addr - device address, required for cmd: 'r' and 'w'."
+	echo "         Format: 85-xxxxxxxxxxxx  (xxx - device ID returned by 's')"
+        echo "  state - required for 'w', 0-1:"
+	echo "          0 - PIOx=0"
+	echo "          1 - PIOx=1"
+	echo " "
+fi
+
+# command 's'
+if [ "$1" = "s" ]; then
+	echo "Found 1-Wire devices: "
+	ls /sys/bus/w1/devices/ | grep -E "[0-9a-f]{2}-[0-9a-f]+"
+fi
+
+# command 'r'
+if [ "$1" = "r" ]; then
+	if [ -z $2 ]; then
+		echo "Read command requires device address! Exit."
+		exit 1
+	fi
+	
+	addr=$2
+	if [ ${#addr} -ne 15 ]; then
+		echo "Address must be in format xx-xxxxxxxxxxxx . Exit."
+		exit 1
+	fi
+	
+	echo "Reading device 2100H '$addr' IOs (xxd output):"
+	#io=$(dd if=/sys/bus/w1/devices/$addr/state bs=1 count=1 > /dev/null 2>&1)
+	io=`cat /sys/bus/w1/devices/$addr/state`
+	echo -ne "$io"|xxd -b
+	echo "   Bits: 76543210"
+	echo "         |||||||+- PIOA Pin state"
+	echo "         ||||||+-- PIOA Out Latch state"
+	echo "         |||||+--- PIOB Pin state"
+	echo "         ||||+---- PIOB Out Latch state"
+	echo "         |||+----- Bit 0 inverted"
+	echo "         ||+------ Bit 1 inverted"
+	echo "         |+------- Bit 2 inverted"
+	echo "         +-------- Bit 3 inverted"
+	echo "   "
+	#echo "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+fi
+
+# command 'w'
+if [ "$1" = "w" ]; then
+        if [ -z $2 ]; then
+                echo "Write command requires device address! Exit."
+                exit 1
+        fi
+
+	addr=$2
+        if [ ${#addr} -ne 15 ]; then
+                echo "Address must be in format xx-xxxxxxxxxxxx . Exit."
+                exit 1
+        fi
+
+        if [ -z $3 ]; then
+                echo "Write command requires PIOA new state! Exit."
+                exit 1
+        fi
+
+	if [ -z $4 ]; then
+                echo "Write command requires PIOB new state! Exit."
+                exit 1
+        fi
+	
+	if [ "$3" -gt 1 ]; then
+		echo "New PIOA state require value 0 or 1. exit."
+		exit 1
+	fi
+	
+	if [ "$4" -gt 1 ]; then
+                echo "New PIOB state require value 0 or 1. exit."
+                exit 1
+        fi
+
+	if [ "$3" -lt 0 ]; then
+                echo "New PIOA state require value 0 or 1. exit."
+                exit 1
+        fi
+
+        if [ "$4" -lt 0 ]; then
+                echo "New PIOB state require value 0 or 1. exit."
+                exit 1
+        fi
+
+	ioa=$3
+	iob=$4
+	io=$(( ($iob*2) + $ioa ))
+	
+	echo -n "Trying to set PIOs to: PIOA=$ioa , PIOB=$iob (DS2413_CMD=0x5A param=0x"	
+	printf "%02X)\n" "$io"
+	
+	if [ "$(id -u)" -ne 0 ]; then
+		echo -e "\033[1;31mTo write to hardware device you need root privileges. \nRun script with sudo or under root account.\033[0m"
+		exit 1
+	fi
+
+	echo -ne "$io" > /sys/bus/w1/devices/$addr/output
+	
+	if [ "$?" -ne 0 ]; then
+		echo -e "\033[31mSomething wrong...\033[0m\n"
+		exit 1
+	fi
+	
+	echo -e "\033[1;32mEverything looks fine on this side, check PIOs state...\033[0m\n\n"	
+
+	#echo "12345678901234567890123456789012345678901234567890123456789012345678901234567890"
+
+fi
+
+
+
+
