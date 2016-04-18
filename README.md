@@ -1,7 +1,7 @@
 # Kernel driver for Chinese clone of DS2413: 3A 2100H
 -------------------------------------------------------------------------------
-I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10USD for 10pcs...) - almost 2,5 times cheaper than in my country from electronic warehose - cool, so I ordered a one set...
-Suprise, suprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
+I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10USD for 10pcs...) - almost 2,5 times cheaper than in my country from electronic warehouse - cool, so I ordered a one set...
+Surprise, surprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
 Few week later :smile: , I made a PCB, hooked DS2413-clone to Raspberry Pi, enabled 1-wire overlay, etc... Everything is connected Pi is running let's see if it "still works" :smile:. Quick check:
 
 ```pi@piv2:~ $ ls /sys/bus/w1/devices
@@ -58,7 +58,7 @@ File: **w1_ds2413_2100h.c** copy to directory:
 
 # Compiling module
 
-I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attmeps to compile only module (and make it working) took me 2 or 3 hours :smile:.
+I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attempts to compile only module (and make it working) took me 2 or 3 hours :smile:.
 
 After calling ```make mrproper``` or ```make bcm2709_defconfig``` copy my kernel configuration file ```.config``` . 
 Now follow standard guide for compiling kernel for Raspberry Pi - I have Pi2 so I did:
@@ -79,7 +79,7 @@ sudo scripts/mkknlimg arch/arm/boot/zImage /boot/kernel7.img
 sudo reboot```
 I had no errors while compiling and running commands :smile:
 # Testing
-Rebot done, I logged into ssh - kernel works ok :smile:
+Reboot done, I logged into ssh - kernel works ok :smile:
 So, let's check what I have got in my device directory nad what is in modules...
 ```pi@piv2:~ $ lsmod
 Module                  Size  Used by
@@ -190,5 +190,7 @@ Trying to set PIOs to: PIOA=1 , PIOB=1 (DS2413_CMD=0x5A param=0x03)
 Everything looks fine on this side, check PIOs state...```
 
 # End photos
-![alt Photos](https://github.com/sapers-2/http://..../)
+![alt Photos](rpi-2100h-f1.jpg?raw=true)
+![alt Photos](rpi-2100h-f2.jpg?raw=true)
+![alt Photos](rpi-2100h-f3.jpg?raw=true)
 
