@@ -58,7 +58,7 @@ File: **w1_ds2413_2100h.c** copy to directory:
 
 # Compiling module
 
-I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attempts to compile only module (and make it working) took me 2 or 3 hours :smile:.
+I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attempts  to compile only module (and make it working) took me 2 or 3 hours :smile:.
 
 After calling ```make mrproper``` or ```make bcm2709_defconfig``` copy my kernel configuration file ```.config``` . 
 Now follow standard guide for compiling kernel for Raspberry Pi - I have Pi2 so I did:
@@ -79,7 +79,7 @@ sudo scripts/mkknlimg arch/arm/boot/zImage /boot/kernel7.img
 sudo reboot```
 I had no errors while compiling and running commands :smile:
 # Testing
-Reboot done, I logged into ssh - kernel works ok :smile:
+Rebot done, I logged into ssh - kernel works ok :smile:
 So, let's check what I have got in my device directory nad what is in modules...
 ```pi@piv2:~ $ lsmod
 Module                  Size  Used by
