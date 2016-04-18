@@ -61,9 +61,9 @@ config W1_SLAVE_2100H
 File: **w1_ds2413_2100h.c** copy to directory: ```linux/drivers/w1/slaves/```
 
 # Compiling module
-I didn't managed to compile module,so I didn't want to waste more time on tries, I just go for whole kernel compilation. Anyway it took less than hour :smile: - while my attempts  to compile only module (and make it working) took me 2 or 3 hours :smile:.
+I didn't managed to compile module, and I didn't want to waste more time while trying, so I just compiled whole kernel. Anyway it took less than hour :smile: - while my attempts  to compile only module (and make it working) took me 2 or 3 hours :smile:.
 
-After calling ```make mrproper``` or ```make bcm2709_defconfig``` copy my kernel configuration file ```.config``` . 
+After calling ```make mrproper``` or ```make bcm2709_defconfig``` copy my kernel configuration file ```.config``` to kernel source base path. 
 Now follow standard guide for compiling kernel for Raspberry Pi - I have Pi2 so I did:
 ```
 cd linux
@@ -79,12 +79,14 @@ sudo cp arch/arm/boot/dts/overlays/README /boot/overlays/
 sudo cp /boot/kernel7.img /boot/kernel7old.img
 sudo rm /boot/kernel7.img
 sudo scripts/mkknlimg arch/arm/boot/zImage /boot/kernel7.img
-sudo reboot```
+sudo reboot
+```
 I had no errors while compiling and running commands :smile:
 # Testing
 Rebot done, I logged into ssh - kernel works ok :smile:
 So, let's check what I have got in my device directory nad what is in modules...
-```pi@piv2:~ $ lsmod
+```
+pi@piv2:~ $ lsmod
 Module                  Size  Used by
 cfg80211              419000  0
 rfkill                 16082  1 cfg80211
@@ -105,10 +107,13 @@ uio_pdrv_genirq         3100  0
 uio                     8064  1 uio_pdrv_genirq
 i2c_dev                 5923  0
 fuse                   83525  1
-ipv6                  345491  36```
+ipv6                  345491  36
+```
 Cool **w1_ds2413_2100h** is loaded :thumbsup: ! , go next:
-```pi@piv2:~ $ ls /sys/bus/w1/devices/85-1003c073b2be
-driver  id  name  output  state  subsystem  uevent```
+```
+pi@piv2:~ $ ls /sys/bus/w1/devices/85-1003c073b2be
+driver  id  name  output  state  subsystem  uevent
+```
 No **rw** :grin: , there is **output** and **state** :grinning: .
 Let's test it, I hooked 2 LEDs to 3,3V with resistors to PIOA & PIOB...
 It took me actually about an hour to figure out how to read and write (and understand what I see, what I need to write) from/to 2100H PIOs .
@@ -117,7 +122,8 @@ But to save you troubles I've written a bash script.
 
 # Test script
 Just run script without parameters:
-```pi@piv2:~ $ ./2100h
+```
+pi@piv2:~ $ ./2100h
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
 Author: saper_2 (Przemyslaw W.)
 Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
@@ -136,20 +142,24 @@ Parameters:
          Format: 85-xxxxxxxxxxxx  (xxx - device ID returned by 's')
   state - required for 'w', 0-1:
           0 - PIOx=0
-          1 - PIOx=1```
+          1 - PIOx=1
+```
 
 ## Device list
-```pi@piv2:~ $ ./2100h s
+```
+pi@piv2:~ $ ./2100h s
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
 Author: saper_2 (Przemyslaw W.)
 Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
 
 
 Found 1-Wire devices:
-85-1003c073b2be```
+85-1003c073b2be
+```
 
 ## Read PIOs
-```pi@piv2:~ $ ./2100h r 85-1003c073b2be
+```
+pi@piv2:~ $ ./2100h r 85-1003c073b2be
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
 Author: saper_2 (Przemyslaw W.)
 Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
@@ -172,7 +182,8 @@ For more information check DS2413 datasheet "PIO ACCESS READ [F5h]".
 ## Write PIOs
 
 To write you need a root privileges, if you don't then:
-```pi@piv2:~ $ ./2100h w 85-1003c073b2be 1 1
+```
+pi@piv2:~ $ ./2100h w 85-1003c073b2be 1 1
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
 Author: saper_2 (Przemyslaw W.)
 Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
@@ -180,17 +191,20 @@ Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
 
 Trying to set PIOs to: PIOA=1 , PIOB=1 (DS2413_CMD=0x5A param=0x03)
 To write to hardware device you need root privileges.
-Run script with sudo or under root account.```
+Run script with sudo or under root account.
+```
 
 Using sudo:
-```pi@piv2:~ $ sudo ./2100h w 85-1003c073b2be 1 1
+```
+pi@piv2:~ $ sudo ./2100h w 85-1003c073b2be 1 1
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
 Author: saper_2 (Przemyslaw W.)
 Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
 
 
 Trying to set PIOs to: PIOA=1 , PIOB=1 (DS2413_CMD=0x5A param=0x03)
-Everything looks fine on this side, check PIOs state...```
+Everything looks fine on this side, check PIOs state...
+```
 
 # End photos
 ![alt Photos](rpi-2100h-f1.jpg?raw=true)
