@@ -3,8 +3,10 @@
 ### Warning: If your Pi/hardware/etc. gone bad, that's your fault, not my.
 ---
 I've found a set of 10pcs of DS2413 on aliexpress for very good price (about 10USD for 10pcs...) - almost 2,5 times cheaper than in my country from electronic warehouse - cool, so I ordered a one set...
-Surprise, surprise, I got 3A 2100H chips - package identical, I connected for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to in at this moment) so I think: ok, works, might be some custom marking, I'll check it later... 
-Few week later :smile: , I made a PCB, hooked DS2413-clone to Raspberry Pi, enabled 1-wire overlay, etc... Everything is connected Pi is running let's see if it "still works" :smile:. Quick check:
+
+Surprise, surprise, I got 3A 2100H chips - package identical, I connected one for quick test using probes to my 1-wire scanner... I got some serial number (I didn't pay much attention to it at that moment), so I thought: ok, works, might be some custom marking, I'll check it later... 
+
+Few week later :smile: , I made a PCB, hooked DS2413-clone to Raspberry Pi, enabled 1-wire overlay, etc... Everything is connected, Pi is running, let's see if it "still works" :smile:. Quick check:
 
 ```
 pi@piv2:~ $ ls /sys/bus/w1/devices
@@ -18,12 +20,13 @@ driver  id  name  rw  subsystem  uevent
 ```
 
 So I have `rw` file for accessing, but nothing with ds2413 in modules. Let's do some google-fu how to handle...
-A two hours later, I'm not happy anymore :disappointed:, looks like I got clones of DS2413 with own "Family code" od 0x85.. ehhhh...
-One solution is hex-editing ds2413 module - too ugly, so I decided I'll try to write own module (or more likely copy-paste :smile:).
+A two hours later, I'm not happy anymore :disappointed:, looks like I got clones of DS2413 with it's own "Family code": 0x85.. ehhhh...
+One solution (found at rpi-forum) is hex-editing ds2413 module - too ugly, so I decided I'll try to write own module (or more likely copy-paste :smile:).
 
-So I "git"-ed latest raspberry pi kernel sources :wink: .
+So I "git"-ed latest raspberry pi kernel sources :wink: . 
 After looking a little around in 1-wire driver code, adding support for 2100H was rather easy: edit few files, rename some functions, add family code to master 1-wire module.
 
+I've written this driver using:
 **KERNEL VERSION: 4.4.y (4.4.7) from 2016-04-17**
 
 ## Repo files
@@ -93,7 +96,7 @@ sudo reboot
 I had no errors while compiling and running commands :smile:
 # Testing
 Rebot done, I logged into ssh - kernel works ok :smile:
-So, let's check what I have got in my device directory nad what is in modules...
+So, let's check what I have got in my device directory and what is in modules...
 ```
 pi@piv2:~ $ lsmod
 Module                  Size  Used by
@@ -190,20 +193,7 @@ For more information check DS2413 datasheet "PIO ACCESS READ [F5h]".
 
 ## Write PIOs
 
-To write you need a root privileges, if you don't then:
-```
-pi@piv2:~ $ ./2100h w 85-1003c073b2be 1 1
-Small script for testing driver for 1-wire 2100H (clone of DS2413)
-Author: saper_2 (Przemyslaw W.)
-Version: 0.1 , 2016-04-18 , License: GNU GPL v.XYZ / MPL / CCA :)
-
-
-Trying to set PIOs to: PIOA=1 , PIOB=1 (DS2413_CMD=0x5A param=0x03)
-To write to hardware device you need root privileges.
-Run script with sudo or under root account.
-```
-
-Using sudo:
+To write you need a root privileges, if you don't then you get slapped by script :D , so use sudo:
 ```
 pi@piv2:~ $ sudo ./2100h w 85-1003c073b2be 1 1
 Small script for testing driver for 1-wire 2100H (clone of DS2413)
@@ -222,3 +212,6 @@ Everything looks fine on this side, check PIOs state...
 
 # Movie
 [https://youtu.be/cut77YWTDhI](https://youtu.be/cut77YWTDhI)
+
+# Epilogue
+:triumph: :triumph: :triumph: :triumph: :)
